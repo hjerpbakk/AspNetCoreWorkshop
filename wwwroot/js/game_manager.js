@@ -1,10 +1,11 @@
-function GameManager(size, InputManager, Actuator, StorageManager) {
-  this.size           = size; // Size of the grid
-  this.inputManager   = new InputManager;
-  this.storageManager = new StorageManager;
-  this.actuator       = new Actuator;
+function GameManager(size, InputManager, Actuator, StorageManager, HighScoreManager) {
+  this.size             = size; // Size of the grid
+  this.inputManager     = new InputManager;
+  this.storageManager   = new StorageManager;
+  this.highScoreManager = new HighScoreManager;
+  this.actuator         = new Actuator;
 
-  this.startTiles     = 2;
+  this.startTiles       = 2;
 
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
@@ -28,12 +29,22 @@ GameManager.prototype.keepPlaying = function () {
 
 // Return true if the game is lost, or has won and the user hasn't kept playing
 GameManager.prototype.isGameTerminated = function () {
-  return this.over || (this.won && !this.keepPlaying);
+  const gameIsTerminated = this.over || (this.won && !this.keepPlaying);
+  if (gameIsTerminated) {
+    const highScore = this.highScoreManager.getHighScore();
+    if (highScore < this.score) {
+      this.highScoreManager.setHighScore(this.score);
+    }
+  }
+
+  return gameIsTerminated;
 };
 
 // Set up the game
 GameManager.prototype.setup = function () {
   var previousState = this.storageManager.getGameState();
+  const highScore = this.highScoreManager.getHighScore();
+  this.storageManager.setBestScore(highScore);
 
   // Reload the game from a previous game if present
   if (previousState) {

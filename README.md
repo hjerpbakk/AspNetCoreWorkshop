@@ -62,15 +62,14 @@ TODO: Bilde av spillet
 - Add it as a singleton to the service collection in `Startup`.
 - Create `HighScoreController`. Check that it works by visiting [https://localhost:5001/api/highscore](https://localhost:5001/api/highscore), verify the value is 0,posting a high score of 1 using _Postman_, and verifying that the new high score is indeed one.
 
-```json
-{ 
-	"score": 1 
-}
-```
-
-TODO: to screens fra postman
+TODO: two screens fra postman
 
 #### Integrate High Score service
+
+- Create a new JS class in `high_score_manager.js`.
+- Add this file to `Game.html`.
+- Add `HighScoreManager` to `application.js`.
+- Use the `HighScoreManager` in `game_manager.js`.
 
 ## Part 2: Local machine ain't good enough
 
