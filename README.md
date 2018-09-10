@@ -1,6 +1,6 @@
 # Workshop Tromsø 20.09.2018
 
-An ASP.net Web app running in containers orchestrated by Docker Compose
+An ASP.net Web app running in containers orchestrated by Docker Compose. In this workshop, all commands are run from the root folder of project unless otherwise noted.
 
 ## Prerequisites
 
@@ -72,6 +72,12 @@ TODO: two screens fra postman
 - Use the `HighScoreManager` in `game_manager.js`.
 
 ## Part 2: Local machine ain't good enough
+
+- Change the `highScoreEndpoint` in `HighScoreManager` to [http://localhost/api/highscore](http://localhost/api/highscore).
+- Create a `Dockerfile` to build and then contain the application
+- Create a `.dockerignore` file to copy the minimum needed files to the build context
+- Run `docker build -t dips/workshop .` to build the docker imager
+- Run `docker run -p 80:80 dips/workshop` to run the app through in container
 
 ## Part 3: Divide and conquer
 
