@@ -1,7 +1,7 @@
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Workshop.Models;
 
@@ -9,18 +9,16 @@ namespace Workshop.Services
 {
     public class HighScoreService : IHighScoreService
     {
-        static readonly ReaderWriterLockSlim writeLock;
+        static readonly SemaphoreSlim semaphoreSlim;
 
         readonly string highScorePath;
-        
-        static HighScoreService() 
-        {
-            writeLock = new ReaderWriterLockSlim();
-        }
 
-        public HighScoreService(IHostingEnvironment hostingEnvironment)
+        static HighScoreService() => semaphoreSlim = new SemaphoreSlim(1, 1);
+
+        public HighScoreService()
         {
-            highScorePath = Path.Combine(hostingEnvironment.WebRootPath, "highScores.json");
+            var binPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            highScorePath = Path.Combine(binPath, "highScores.json");
             if (File.Exists(highScorePath)) 
             {
                 HighScore = int.Parse(File.ReadAllText(highScorePath));
@@ -30,21 +28,18 @@ namespace Workshop.Services
         public int HighScore { get; private set; }
         public async Task<bool> AddScore(int score) 
         {
-            writeLock.EnterWriteLock();
-            if (score < HighScore) {
-                return false;
-            }
+            await semaphoreSlim.WaitAsync();
+            try {
+                if (score <= HighScore) {
+                    return false;
+                }
 
-            try
-            {
+                HighScore = score;
                 await File.WriteAllTextAsync(highScorePath, score.ToString());
-            }
-            finally 
-            {
-                writeLock.ExitWriteLock();
-            }
-
-            return true;
+                return true;
+            } finally {
+                semaphoreSlim.Release();
+            }           
         }
     }
 }

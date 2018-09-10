@@ -6,7 +6,8 @@ An ASP.net Web app running in containers orchestrated by Docker Compose
 
 - Install the latest version of .Net Core.
 - Install the latest version of Docker, using the edge channel.
-- TODO: Run the empty build and runtime container
+- TODO: Run the empty build and runtime container.
+- Install postman.
 
 ## Part 1: Anatomy of an ASP.Net Web App
 
@@ -47,6 +48,8 @@ Now you'll add a simple 2048 game and high score services.
 - Add the content of the `Game` folder to the `wwwroot` folder.
 - Verify that the game runs on [https://localhost:5001/Game.html](https://localhost:5001/Game.html).
 
+TODO: Bilde av spillet
+
 #### Link game from example site
 
 - Add `<li><a href="Game.html">Game</a></li>` to `_Layout.cshtml`.
@@ -57,7 +60,15 @@ Now you'll add a simple 2048 game and high score services.
 - Create the interface of a simple high score service, `IHighScoreService`.
 - Implement it in `HighScoreService`.
 - Add it as a singleton to the service collection in `Startup`.
-- Create `HomeController`. Check that it works by visiting [https://localhost:5001/api/highscore](https://localhost:5001/api/highscore).
+- Create `HighScoreController`. Check that it works by visiting [https://localhost:5001/api/highscore](https://localhost:5001/api/highscore), verify the value is 0,posting a high score of 1 using _Postman_, and verifying that the new high score is indeed one.
+
+```json
+{ 
+	"score": 1 
+}
+```
+
+TODO: to screens fra postman
 
 #### Integrate High Score service
 

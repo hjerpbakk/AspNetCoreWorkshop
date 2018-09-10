@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Workshop.Services;
 
@@ -13,5 +14,8 @@ namespace Workshop.Controllers
 
         [HttpGet]
         public ActionResult<int> Get() => highScoreService.HighScore; 
+
+        [HttpPost]
+        public async Task<ActionResult<bool>> AddScore([FromBody] int score) => await highScoreService.AddScore(score);
     }
 }
