@@ -57,6 +57,7 @@ Now you'll add a simple 2048 game and high score services.
 - Create the interface of a simple high score service, `IHighScoreService`.
 - Implement it in `HighScoreService`.
 - Add it as a singleton to the service collection in `Startup`.
+- Create `HomeController`. Check that it works by visiting [https://localhost:5001/api/highscore](https://localhost:5001/api/highscore).
 
 #### Integrate High Score service
 
