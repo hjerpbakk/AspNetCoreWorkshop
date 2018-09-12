@@ -18,7 +18,9 @@ namespace Workshop.Services
         public HighScoreService()
         {
             var binPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            highScorePath = Path.Combine(binPath, "highScores.json");
+            var scoresFolder = Path.Combine(binPath, "scores");
+            Directory.CreateDirectory(scoresFolder);
+            highScorePath = Path.Combine(scoresFolder, "highScore.json");
             if (File.Exists(highScorePath)) 
             {
                 HighScore = int.Parse(File.ReadAllText(highScorePath));
