@@ -86,6 +86,7 @@ Now we'll host the webapp in a Docker container
 - Create a `.dockerignore` file to copy the minimum needed files to the build context
 - Run `docker build -t dips/workshop .` to build the docker imager
 - Run `docker run -p 80:80 dips/workshop` to run the app through in container
+- Verify that it works in the browser
 
 ### Adding mounting to prevserve high score
 
@@ -95,15 +96,37 @@ Now we'll host the webapp in a Docker container
 
 We don't want the website and API in the same app. Let's fix this.
 
+### Create a new folder for the web project
+
+- Create a new folder called `web` in the root folder.
+- Move all files and folders to `web`, except `LICENSE` and `readme.md`.
+- Recreate `.dockerignore` if it got lost in the moving process
+
 ### Move high score to own app
 
-- Create a new folder called `api` 
-- Navigate to the folder and create a new app `dotnet new webapi`
+- Create a new folder called `api` in the root folder.
+- Navigate into the `api` folder and create a new app `dotnet new webapi`
 - Open the project i VS Code `code .`
 - Move `IHighScoreService`, `HighScoreService` and `HighScoreController` to the new app.
 - Move `services.AddSingleton<IHighScoreService, HighScoreService>();` to the new `Startup`.
-- Verify that the new service works using postman.
+- Remove `using Workshop.Services;` from the original `Startup`.
+- Verify that the new service works using Postman.
 
 ### Create another Docker container
 
+All commands here are called from the `api`-folder.
+
+- Create a `Dockerfile` to build and then contain the application
+- Create a `.dockerignore` file to copy the minimum needed files to the build context
+- Run `docker build -t dips/api .` to build the docker imager
+- Run `docker run -p 80:80 -v /Users/sankra/projects/AspNetCoreWorkshop/api/scores:/app/scores dips/api` to run the app through in container
+- Verify it works using Postman.
+
 ### Make them work together
+
+- Create a new file, `docker-compose.yml`, in the root folder.
+- In `high_score_manager` in the web-project, change `highScoreEndpoint` to [http://api/highscore](http://api/highscore).
+- Navigate to the `web` folder and run `docker build -t dips/api .`.
+- Navigate back to the root folder and run `docker-compose up`.
+- Enjoy your apps working together.
+
