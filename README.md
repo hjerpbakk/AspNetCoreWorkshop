@@ -100,6 +100,9 @@ We don't want the website and API in the same app. Let's fix this.
 - Create a new folder called `api` 
 - Navigate to the folder and create a new app `dotnet new webapi`
 - Open the project i VS Code `code .`
+- Move `IHighScoreService`, `HighScoreService` and `HighScoreController` to the new app.
+- Move `services.AddSingleton<IHighScoreService, HighScoreService>();` to the new `Startup`.
+- Verify that the new service works using postman.
 
 ### Create another Docker container
 
