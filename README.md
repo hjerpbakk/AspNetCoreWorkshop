@@ -36,12 +36,12 @@ In this part you will create a simple ASP.Net web app and web API, familiarising
 
 ### Get to know ASP.Net
 
-- Static resources
-- Model View Controller
-- Dependency Injection
-- Configuration
-- Routes
-- Request pipeline
+- [Static resources](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-2.1&tabs=aspnetcore2x)
+- [Model View Controller](https://docs.microsoft.com/en-us/aspnet/core/mvc/overview?view=aspnetcore-2.1)
+- [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.1)
+- [Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-2.1)
+- [Routes](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing?view=aspnetcore-2.1)
+- [Request pipeline](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-2.1)
 
 ### Implement an actual app
 
