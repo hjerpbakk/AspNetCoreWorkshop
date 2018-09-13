@@ -69,7 +69,7 @@ Now you'll add a simple 2048 game and high score services.
   - Verify the value is 0, posting a high score of 1 using _Postman_ and content type JSON, and verifying that the new high score is indeed one.
 
 ![](doc/PostmanGet.PNG)
-![](doc/PostmanPost.PNG)
+![](doc/PostmanPost.png)
 
 #### Integrate High Score service
 
