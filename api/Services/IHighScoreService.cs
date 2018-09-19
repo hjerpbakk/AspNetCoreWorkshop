@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Workshop.Services
+namespace api.Services
 {
     public interface IHighScoreService
     {

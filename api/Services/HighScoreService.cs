@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Workshop.Services
+namespace api.Services
 {
     public class HighScoreService : IHighScoreService
     {

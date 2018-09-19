@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+using api.Services;
+
 namespace api
 {
     public class Startup
@@ -25,6 +27,7 @@ namespace api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSingleton<IHighScoreService, HighScoreService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
