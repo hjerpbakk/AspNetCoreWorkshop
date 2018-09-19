@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  api:
+    image: dips/api
+    restart: always
+    volumes:
+      - "./scores:/app/scores"
+    ports:
+      - 5000:5000
+  web:
+    image: dips/workshop
+    restart: always
+    ports:
+      - 80:5000
+    depends_on:
+      - api
