@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using Workshop.Services;
+
 namespace Workshop
 {
     public class Startup
@@ -32,6 +34,7 @@ namespace Workshop
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSingleton<IHighScoreService, HighScoreService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
