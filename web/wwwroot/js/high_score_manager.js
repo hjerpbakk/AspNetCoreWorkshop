@@ -1,6 +1,6 @@
 class HighScoreManager {
     constructor() {
-        this.highScoreEndpoint = 'http://api/highscore';
+        this.highScoreEndpoint = 'http://localhost:5000/api/highscore/';
     }
 
     setHighScore(score) {

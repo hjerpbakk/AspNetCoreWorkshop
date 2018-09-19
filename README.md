@@ -6,7 +6,7 @@ An ASP.net Web app running in containers orchestrated by Docker Compose. In this
 
 - Install `git`
 - Install the latest version of `.Net Core`.
-- Install the latest version of `Docker`, using the edge channel.
+- Install the latest version of `Docker`.
 - Install `Visual Studio Code`.
 - Run `docker run --rm microsoft/dotnet:2.1-sdk-alpine`.
 - Run `docker run --rm microsoft/dotnet:2.1-aspnetcore-runtime-alpine`.
@@ -65,8 +65,8 @@ Now you'll add a simple 2048 game and high score services.
 - In it, create the interface of a simple high score service, `IHighScoreService.cs`.
 - Implement it in a new file called `HighScoreService.cs` in the same directory.
 - Add it as a singleton to the service collection in `Startup.cs`
-- Create `HighScoreController`. Check that it works by visiting [http://localhost:5000/api/highscore](http://localhost:5001/api/highscore) (You might need to restart the server).
-  - Verify the value is 0, posting a high score of 1 using _Postman_ and content type JSON, and verifying that the new high score is indeed one.
+- Create `HighScoreController`. Check that it works by visiting [http://localhost:5000/api/highscore](http://localhost:5000/api/highscore) (You might need to restart the server).
+- Verify the value is 0, posting a high score of 1 using _Postman_ and content type JSON, and verifying that the new high score is indeed one.
 
 ![](doc/PostmanGet.PNG)
 ![](doc/PostmanPost.png)
@@ -74,7 +74,7 @@ Now you'll add a simple 2048 game and high score services.
 #### Integrate High Score service
 
 - Create a new JS class in `high_score_manager.js` in `wwwroot/js`
-  - The class should have a `setHighScore` and a `getHighScore` method which should use your highscore service to get and update the highscore
+- The class should have a `setHighScore` and a `getHighScore` method which should use your highscore service to get and update the highscore
 - Add this file to `Game.html`'s script imports.
 - Add `HighScoreManager` to `application.js`.
 - Use the `HighScoreManager` in `game_manager.js`.
@@ -86,17 +86,17 @@ Now we'll host the webapp in a Docker container
 
 ### First Docker try
 
-- Change the `highScoreEndpoint` in `HighScoreManager` to [http://localhost/api/highscore](http://localhost/api/highscore).
+- Update `Program.cs` and add `.UseUrls("http://*:5000")`.
 - Create a `Dockerfile` to build and then contain the application
 - Create a `.dockerignore` file to copy the minimum needed files to the build context
 - Run `docker build -t dips/workshop .` to build the docker image
-- Run `docker run -p 80:80 dips/workshop` to run the app through in container
+- Run `docker run -p 5000:5000 dips/workshop` to run the app through in container
 - Verify that it works in the browser
 
 ### Adding mounting to preserve high score
 
-- Run `docker run -p 80:80 -v <Path-To-Project>/scores:/app/scores dips/workshop`
-  - For windows you need to enable drive sharing in Docker settings
+- Run `docker run -p 5000:5000 -v <Path-To-Project>/scores:/app/scores dips/workshop`
+- For windows you need to enable drive sharing in Docker settings
 
 ## Part 3: Divide and conquer
 
@@ -112,7 +112,8 @@ We don't want the website and API in the same app. Let's fix this.
 
 - Create a new folder called `api` in the root folder.
 - Navigate into the `api` folder and create a new app `dotnet new webapi`
-- Open the project i VS Code `code .`
+- Open the project in VS Code `code .`
+- Update `Program.cs` and add `.UseUrls("http://*:5000")`.
 - Move `IHighScoreService`, `HighScoreService` and `HighScoreController` to the new app.
 - Move `services.AddSingleton<IHighScoreService, HighScoreService>();` to the new `Startup`.
 - Remove `using Workshop.Services;` from the original `Startup`.
@@ -124,14 +125,14 @@ All commands here are called from the `api`-folder.
 
 - Create a `Dockerfile` to build and then contain the application
 - Create a `.dockerignore` file to copy the minimum needed files to the build context
+- In `Startup.cs`, add `services.AddCors();` to `public void ConfigureServices(IServiceCollection services)` and `app.UseCors(builder => builder.WithOrigins("http://localhost"));` to `public void Configure(IApplicationBuilder app, IHostingEnvironment env)`.
 - Run `docker build -t dips/api .` to build the docker image
-- Run `docker run -p 80:80 -v <Path-To-Project>/api/scores:/app/scores dips/api` to run the app through the container
+- Run `docker run -p 5000:5000 -v <Path-To-Project>/scores:/app/scores dips/api` to run the app through the container
 - Verify it works using Postman.
 
 ### Make them work together
 
 - Create a new file, `docker-compose.yml`, in the root folder.
-- In `high_score_manager` in the web-project, change `highScoreEndpoint` to [http://api/highscore](http://api/highscore).
 - Navigate to the `web` folder and run `docker build -t dips/workshop .`
 - Navigate back to the root folder and run `docker-compose up`.
 - Enjoy your apps working together.

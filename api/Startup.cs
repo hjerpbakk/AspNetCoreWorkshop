@@ -27,6 +27,8 @@ namespace api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddCors();
             services.AddSingleton<IHighScoreService, HighScoreService>();
         }
 
@@ -42,6 +44,8 @@ namespace api
                 app.UseHsts();
             }
 
+            app.UseCors(builder =>
+                builder.WithOrigins("http://localhost"));
             app.UseHttpsRedirection();
             app.UseMvc();
         }
