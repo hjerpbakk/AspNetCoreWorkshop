@@ -157,3 +157,10 @@ All commands here are called from the `api`-folder.
 - Enjoy your apps working together.
 
 #### Solution: `git checkout part4-compose`
+
+Congratulations! You now have a multi-container web application orchestrated by Docker Compose. Note how the app's concerns have been separated across the containers: so long as the API is available, our game doesn't care about *how* scores are stored. If we wanted, we could implement new high-score service backed by a proper database, and transparently replace the old service on-the-fly.
+
+### Extra credit
+
+- Right now, we have to manually set up CORS headers to allow the user to submit high scores, due to the [same-origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy). A far better way of handling this is to set up a *reverse proxy* - like [Traefik](https://traefik.io/) or [Nginx](https://www.nginx.com/) - to handle user requests and pass them on to the correct container. Add a reverse proxy to your application to intercept requests to `api/highscore` and pass them to the `api` container.
+- While Docker gives you command-line tools to manage running containers, they can get a bit hairy if you're running lots of applications with multiple containers. To make your life a bit easier, there are services which provide GUIs for container management, such as [Portainer](https://github.com/portainer/portainer). Extend your `docker-compose.yml` file with a Portainer service to manage the containers from your browser.
