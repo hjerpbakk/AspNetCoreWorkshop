@@ -39,8 +39,18 @@ namespace api
                 app.UseDeveloperExceptionPage();
             }
 
+            // The browser's same-origin policy makes sure that you can only request resources from the
+            // server hosting the page you're visiting.
+            
+            // Normally, this is very good, as it stops malicious pages from making requests on your behalf,
+            // but since our API is now running on a separate server, it will break our application
+            // if we don't account for it.
+
+            // For testing purposes, we simply allow any request coming from our PC -
+            // for a larger application, a better way to handle this is to set up a "reverse proxy" like Traefik or Nginx,
+            // which handles requests from the user, and passes them on to the correct container.
+            app.UseCors(builder => builder.WithOrigins("http://localhost").AllowAnyHeader().AllowAnyMethod());
             app.UseMvc();
-            app.UseCors(builder => builder.WithOrigins("http://localhost"));
         }
     }
 }
