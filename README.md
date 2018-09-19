@@ -29,18 +29,19 @@ In this part you will create a simple ASP.Net web app and web API, familiarising
 ![](doc/vscode.png)
 
 - Press *yes*.
-- `Shift + CMD + B` to build
+- Remove `app.UseHttpsRedirection();` from Startup.cs
+- `Ctrl + Shift + B` to build (`Shift + ⌘ + B` on a Mac)
 - `F5` to debug
 - You should see the default ASP.Net website template running in your browser.
 
 ### Get to know ASP.Net
 
-- Static resources
-- Model View Controller
-- Dependency Injection
-- Configuration
-- Routes
-- Request pipeline
+- [Static resources](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-2.1&tabs=aspnetcore2x)
+- [Model View Controller](https://docs.microsoft.com/en-us/aspnet/core/mvc/overview?view=aspnetcore-2.1)
+- [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.1)
+- [Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-2.1)
+- [Routes](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing?view=aspnetcore-2.1)
+- [Request pipeline](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-2.1)
 
 ### Implement an actual app
 
@@ -48,29 +49,33 @@ Now you'll add a simple 2048 game and high score services.
 
 #### Create HTML5 game
 
-- Add the content of the `Game` folder to the `wwwroot` folder.
-- Verify that the game runs on [https://localhost:5001/Game.html](https://localhost:5001/Game.html).
+- Add the content of the `Game` folder to your `wwwroot` folder.
+- Verify that the game runs on [http://localhost:5000/Game.html](http://localhost:5000/Game.html).
 
-TODO: Bilde av spillet
+![](doc/game.png)
 
 #### Link game from example site
 
-- Add `<li><a href="Game.html">Game</a></li>` to `_Layout.cshtml`.
+- Add `<li><a href="Game.html">Game</a></li>` to `views/Shared/_Layout.cshtml`.
 - Verify that the game can be opened from the menu 
 
 #### Create High Score service
 
-- Create the interface of a simple high score service, `IHighScoreService`.
-- Implement it in `HighScoreService`.
-- Add it as a singleton to the service collection in `Startup`.
-- Create `HighScoreController`. Check that it works by visiting [https://localhost:5001/api/highscore](https://localhost:5001/api/highscore), verify the value is 0,posting a high score of 1 using _Postman_, and verifying that the new high score is indeed one.
+- Create a directory called `Services`
+- In it, create the interface of a simple high score service, `IHighScoreService.cs`.
+- Implement it in a new file called `HighScoreService.cs` in the same directory.
+- Add it as a singleton to the service collection in `Startup.cs`
+- Create `HighScoreController`. Check that it works by visiting [http://localhost:5000/api/highscore](http://localhost:5001/api/highscore) (You might need to restart the server).
+  - Verify the value is 0, posting a high score of 1 using _Postman_ and content type JSON, and verifying that the new high score is indeed one.
 
-TODO: two screens fra postman
+![](doc/PostmanGet.PNG)
+![](doc/PostmanPost.png)
 
 #### Integrate High Score service
 
-- Create a new JS class in `high_score_manager.js`.
-- Add this file to `Game.html`.
+- Create a new JS class in `high_score_manager.js` in `wwwroot/js`
+  - The class should have a `setHighScore` and a `getHighScore` method which should use your highscore service to get and update the highscore
+- Add this file to `Game.html`'s script imports.
 - Add `HighScoreManager` to `application.js`.
 - Use the `HighScoreManager` in `game_manager.js`.
 - Verify that `scores/highScore.json` is written to disk in the _bin-folder_.
@@ -84,13 +89,14 @@ Now we'll host the webapp in a Docker container
 - Change the `highScoreEndpoint` in `HighScoreManager` to [http://localhost/api/highscore](http://localhost/api/highscore).
 - Create a `Dockerfile` to build and then contain the application
 - Create a `.dockerignore` file to copy the minimum needed files to the build context
-- Run `docker build -t dips/workshop .` to build the docker imager
+- Run `docker build -t dips/workshop .` to build the docker image
 - Run `docker run -p 80:80 dips/workshop` to run the app through in container
 - Verify that it works in the browser
 
-### Adding mounting to prevserve high score
+### Adding mounting to preserve high score
 
-- Run `docker run -p 80:80 -v /Users/sankra/projects/AspNetCoreWorkshop/scores:/app/scores dips/workshop`
+- Run `docker run -p 80:80 -v <Path-To-Project>/scores:/app/scores dips/workshop`
+  - For windows you need to enable drive sharing in Docker settings
 
 ## Part 3: Divide and conquer
 
@@ -118,15 +124,14 @@ All commands here are called from the `api`-folder.
 
 - Create a `Dockerfile` to build and then contain the application
 - Create a `.dockerignore` file to copy the minimum needed files to the build context
-- Run `docker build -t dips/api .` to build the docker imager
-- Run `docker run -p 80:80 -v /Users/sankra/projects/AspNetCoreWorkshop/api/scores:/app/scores dips/api` to run the app through in container
+- Run `docker build -t dips/api .` to build the docker image
+- Run `docker run -p 80:80 -v <Path-To-Project>/api/scores:/app/scores dips/api` to run the app through the container
 - Verify it works using Postman.
 
 ### Make them work together
 
 - Create a new file, `docker-compose.yml`, in the root folder.
 - In `high_score_manager` in the web-project, change `highScoreEndpoint` to [http://api/highscore](http://api/highscore).
-- Navigate to the `web` folder and run `docker build -t dips/api .`.
+- Navigate to the `web` folder and run `docker build -t dips/workshop .`
 - Navigate back to the root folder and run `docker-compose up`.
 - Enjoy your apps working together.
-
