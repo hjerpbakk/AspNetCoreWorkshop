@@ -39,14 +39,13 @@ namespace api
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
-
+                        
             app.UseCors(builder =>
-                builder.WithOrigins("http://localhost"));
-            app.UseHttpsRedirection();
+                builder.WithOrigins("http://localhost")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+            );
             app.UseMvc();
         }
     }

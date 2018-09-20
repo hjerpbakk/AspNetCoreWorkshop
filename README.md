@@ -142,7 +142,7 @@ All commands here are called from the `api`-folder.
 
 - Create a `Dockerfile` to build and then contain the application
 - Create a `.dockerignore` file to copy the minimum needed files to the build context
-- In `Startup.cs`, add `services.AddCors();` to `public void ConfigureServices(IServiceCollection services)` and `app.UseCors(builder => builder.WithOrigins("http://localhost"));` to `public void Configure(IApplicationBuilder app, IHostingEnvironment env)`.
+- In `Startup.cs`, add `services.AddCors();` to `public void ConfigureServices(IServiceCollection services)` and `app.UseCors(builder => builder.WithOrigins("http://localhost").AllowAnyMethod().AllowAnyHeader().AllowCredentials());` to `public void Configure(IApplicationBuilder app, IHostingEnvironment env)` before `app.UseMvc();`.
 - Run `docker build -t dips/api .` to build the docker image
 - Run `docker run -p 5000:5000 -v <Path-To-Project>/scores:/app/scores dips/api` to run the app through the container
 - Verify it works using Postman.
