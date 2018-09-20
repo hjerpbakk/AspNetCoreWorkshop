@@ -328,3 +328,5 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+*.cache-7
+.cache/fontconfig/CACHEDIR.TAG
